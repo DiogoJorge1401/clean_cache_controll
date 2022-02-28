@@ -4,7 +4,7 @@
 
 1.  Sistema executa o comando "Salvar Compras" ✅
 
-2.  Sistema cria uma data para ser armazenada no Cache
+2.  Sistema cria uma data para ser armazenada no Cache ✅
 
 3.  Sistema apaga os dados do Cache atual ✅
 

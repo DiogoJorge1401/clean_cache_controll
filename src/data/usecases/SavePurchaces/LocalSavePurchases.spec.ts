@@ -36,7 +36,9 @@ describe('LocalSavePurchases', () => {
     const { cacheStore, sut } = makeSut(timestamp)
     const purchases = mockPurchases()
 
-    await sut.save(purchases)
+    const promise = sut.save(purchases)
+
+    expect(promise).resolves.not.toThrow()
 
     expect(cacheStore.messages).toEqual([
       CacheStoreSpy.Message.delete,
@@ -51,6 +53,8 @@ describe('LocalSavePurchases', () => {
       timestamp,
       value: purchases,
     })
+
+    await expect(promise).resolves.not.toThrow()
   })
 
   it('Should throw if insert throws', async () => {
