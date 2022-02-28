@@ -18,6 +18,11 @@ class CacheStoreSpy implements CacheStore {
     this.insertKey = key
     this.insertValues = values
   }
+  simulateDeleteError(): void {
+    jest.spyOn(CacheStoreSpy.prototype, 'delete').mockImplementationOnce(() => {
+      throw new Error()
+    })
+  }
 }
 
 type SutTypes = {
@@ -66,10 +71,8 @@ describe('LocalSavePurchases', () => {
   it('Should not insert new Cache if delete fails', () => {
     const { cacheStore, sut } = makeSut()
 
-    jest.spyOn(cacheStore, 'delete').mockImplementationOnce(() => {
-      throw new Error()
-    })
-
+    cacheStore.simulateDeleteError()
+    
     expect(sut.save(mockPurchases())).rejects.toThrow()
     expect(cacheStore.insertCallsCount).toBe(0)
   })
