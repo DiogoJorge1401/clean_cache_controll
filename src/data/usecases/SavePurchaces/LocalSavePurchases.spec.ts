@@ -10,6 +10,10 @@ class CacheStoreSpy implements CacheStore {
     this.deleteCallsCount += 1
     this.key = key
   }
+
+  async insert(): Promise<void> {
+    this.insertCallsCount += 1
+  }
 }
 
 type SutTypes = {
@@ -51,5 +55,11 @@ describe('LocalSavePurchases', () => {
 
     expect(sut.save()).rejects.toThrow()
     expect(cacheStore.insertCallsCount).toBe(0)
+  })
+  it('Should insert new Cache if delete succeeds', async () => {
+    const { cacheStore, sut } = makeSut()
+    sut.save()
+    expect(cacheStore.deleteCallsCount).toBe(1)
+    expect(cacheStore.insertCallsCount).toBe(1)
   })
 })
