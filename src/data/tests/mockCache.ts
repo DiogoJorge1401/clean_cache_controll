@@ -7,14 +7,18 @@ export class CacheStoreSpy implements CacheStore {
   insertKey: string
   insertValues: Array<SavePurchases.Params> = []
 
-  async delete(key: string): Promise<void> {
+  delete(key: string): void {
     this.actions.push(CacheStoreSpy.Action.delete)
     this.deleteKey = key
   }
-  async insert(key: string, values: any): Promise<void> {
+  insert(key: string, values: any): void {
     this.actions.push(CacheStoreSpy.Action.insert)
     this.insertKey = key
     this.insertValues = values
+  }
+  replace(key: string, value: any): void {
+    this.delete(key)
+    this.insert(key, value)
   }
   simulateDeleteError(): void {
     jest.spyOn(CacheStoreSpy.prototype, 'delete').mockImplementationOnce(() => {
