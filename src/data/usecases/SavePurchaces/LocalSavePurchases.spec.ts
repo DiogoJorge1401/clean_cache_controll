@@ -23,6 +23,11 @@ class CacheStoreSpy implements CacheStore {
       throw new Error()
     })
   }
+  simulateInsertError(): void {
+    jest.spyOn(CacheStoreSpy.prototype, 'insert').mockImplementationOnce(() => {
+      throw new Error()
+    })
+  }
 }
 
 type SutTypes = {
@@ -72,7 +77,7 @@ describe('LocalSavePurchases', () => {
     const { cacheStore, sut } = makeSut()
 
     cacheStore.simulateDeleteError()
-    
+
     expect(sut.save(mockPurchases())).rejects.toThrow()
     expect(cacheStore.insertCallsCount).toBe(0)
   })
@@ -87,5 +92,12 @@ describe('LocalSavePurchases', () => {
 
     expect(cacheStore.insertKey).toBe('purchases')
     expect(cacheStore.insertValues).toEqual(purchases)
+  })
+  it('Should throw if insert throws', () => {
+    const { cacheStore, sut } = makeSut()
+
+    cacheStore.simulateInsertError()
+
+    expect(sut.save(mockPurchases())).rejects.toThrow()
   })
 })
