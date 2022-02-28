@@ -6,7 +6,7 @@ export default {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/src/',
   }),
-  testEnvironments: 'node',
+  testEnvironment: 'node',
   coverageProvider: 'v8',
   preset: 'ts-jest',
   coveragePathIgnorePatterns: ['/node_modules/'],
