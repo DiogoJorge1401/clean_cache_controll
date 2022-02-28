@@ -10,7 +10,7 @@
 
 4.  Sistema grava os novos dados do Cache ✅
 
-5.  Sistema não retorna nenhum erro
+5.  Sistema não retorna nenhum erro ✅
 
 > ## Exceção - Erro ao apagar dados do Cache
 
