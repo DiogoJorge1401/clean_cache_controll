@@ -4,12 +4,18 @@
 
 1.  Sistema executa o comando "Salvar Compras"
 
-2.  Sistema faz um encoding nos dados a serem gravados
+2.  Sistema cria uma data para ser armazenada no Cache
 
-3.  Sistema cria uma data para ser armazenada no Cache
+3.  Sistema apaga os dados do Cache atual
 
-4.  Sistema limpa os dados do Cache atual
+4.  Sistema grava os novos dados no Cache
 
-5.  Sistema adiciona os novos dados no Cache
+5.  Sistema não retorna nenhum erro
 
-6.  Sistema não retorna nenhum erro
+> ## Exceção - Erro ao dados do Cache
+
+1.  Sistema retorna o erro
+
+> ## Exceção - Erro ao gravar do Cache
+
+1.  Sistema retorna o erro
