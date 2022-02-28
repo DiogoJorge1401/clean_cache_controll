@@ -4,16 +4,21 @@ import { LocalSavePurchases } from '@/data/usecases'
 class CacheStoreSpy implements CacheStore {
   insertCallsCount: number = 0
   deleteCallsCount: number = 0
-  key: string
+  deleteKey: string
+  insertKey: string
 
   async delete(key: string): Promise<void> {
     this.deleteCallsCount += 1
-    this.key = key
+    this.deleteKey = key
+  }
+  async insert(key: string): Promise<void> {
+    this.insertCallsCount += 1
+    this.insertKey = key
   }
 }
 
 type SutTypes = {
-  cacheStore: CacheStore
+  cacheStore: CacheStoreSpy
   sut: LocalSavePurchases
 }
 
@@ -40,9 +45,9 @@ describe('LocalSavePurchases', () => {
     await sut.save()
 
     expect(cacheStore.deleteCallsCount).toBe(1)
-    expect(cacheStore.key).toBe('purchaces')
+    expect(cacheStore.deleteKey).toBe('purchaces')
   })
-  it('Should not insert new Cache if delete fails', async () => {
+  it('Should not insert new Cache if delete fails', () => {
     const { cacheStore, sut } = makeSut()
 
     jest.spyOn(cacheStore, 'delete').mockImplementationOnce(() => {
@@ -51,5 +56,14 @@ describe('LocalSavePurchases', () => {
 
     expect(sut.save()).rejects.toThrow()
     expect(cacheStore.insertCallsCount).toBe(0)
+  })
+  it('Should insert new Cache if delete succeeds', async () => {
+    const { cacheStore, sut } = makeSut()
+
+    await sut.save()
+
+    expect(cacheStore.insertCallsCount).toBe(1)
+    expect(cacheStore.deleteCallsCount).toBe(1)
+    expect(cacheStore.insertKey).toBe('purchases')
   })
 })
