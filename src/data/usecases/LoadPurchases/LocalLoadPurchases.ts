@@ -12,11 +12,9 @@ export class LocalLoadPurchases implements SavePurchases, LoadPurchases {
     try {
       const cache = this.cacheStore.fetch(this.key)
 
-      const expired = !CachePolicy.validate(cache.timestamp, this.currentDate)
-
-      if (expired) return []
-
-      return cache.value
+      return CachePolicy.validate(cache.timestamp, this.currentDate)
+        ? cache.value
+        : []
     } catch (err) {
       return []
     }
@@ -29,7 +27,6 @@ export class LocalLoadPurchases implements SavePurchases, LoadPurchases {
       const expired = !CachePolicy.validate(cache.timestamp, this.currentDate)
 
       if (expired) this.cacheStore.delete(this.key)
-      
     } catch (error) {
       this.cacheStore.delete(this.key)
     }
