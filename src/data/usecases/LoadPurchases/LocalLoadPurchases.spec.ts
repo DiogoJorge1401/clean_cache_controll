@@ -1,7 +1,7 @@
 import {
   CacheStoreSpy,
   getCacheExpirationDate,
-  mockPurchases
+  mockPurchases,
 } from '@/data/tests'
 import { LocalLoadPurchases } from '@/data/usecases'
 
@@ -33,10 +33,7 @@ describe('LocalLoadPurchases', () => {
 
     const purchases = await sut.loadAll()
 
-    expect(cacheStore.actions).toEqual([
-      CacheStoreSpy.Action.fetch,
-      CacheStoreSpy.Action.delete,
-    ])
+    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
 
     expect(purchases).toEqual([])
   })
