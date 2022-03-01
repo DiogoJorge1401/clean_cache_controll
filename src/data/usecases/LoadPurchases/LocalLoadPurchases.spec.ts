@@ -1,4 +1,4 @@
-import { CacheStoreSpy } from '@/data/tests'
+import { CacheStoreSpy, mockPurchases } from '@/data/tests'
 import { LocalLoadPurchases } from '@/data/usecases'
 
 type SutTypes = {
@@ -21,14 +21,6 @@ describe('LocalSavePurchases', () => {
 
     expect(cacheStore.actions).toEqual([])
   })
-  it('Should call correct key on load', async () => {
-    const { cacheStore, sut } = makeSut()
-
-    await sut.loadAll()
-
-    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
-    expect(cacheStore.fetchKey).toBe('purchases')
-  })
   it('Should return an empty list if loading fails', async () => {
     const { cacheStore, sut } = makeSut()
 
@@ -40,7 +32,24 @@ describe('LocalSavePurchases', () => {
       CacheStoreSpy.Action.fetch,
       CacheStoreSpy.Action.delete,
     ])
-    
+
     expect(purchases).toEqual([])
+  })
+  it('Should return a list of purchases if cache is less than 3 days old', async () => {
+
+    const timestamp = new Date()
+
+    const { cacheStore, sut } = makeSut(timestamp)
+
+    cacheStore.fetchResult = {
+      timestamp,
+      value:mockPurchases()
+    }
+
+    const purchases = await sut.loadAll()
+
+    expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
+    expect(cacheStore.fetchKey).toBe('purchases')
+    expect(purchases).toEqual(cacheStore.fetchResult.value)
   })
 })
