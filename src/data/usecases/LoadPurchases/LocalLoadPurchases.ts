@@ -14,10 +14,7 @@ export class LocalLoadPurchases implements SavePurchases, LoadPurchases {
 
       const expired = !CachePolicy.validate(cache.timestamp, this.currentDate)
 
-      if (expired) {
-        this.cacheStore.delete(this.key)
-        return []
-      }
+      if (expired) return []
 
       return cache.value
     } catch (err) {
