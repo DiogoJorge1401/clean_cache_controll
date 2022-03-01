@@ -25,6 +25,14 @@ export class LocalLoadPurchases implements SavePurchases, LoadPurchases {
     }
   }
 
+  validate(): void {
+    try {
+      this.cacheStore.fetch(this.key)
+    } catch (error) {
+      this.cacheStore.delete(this.key)
+    }
+  }
+
   async save(purchases: Array<SavePurchases.Params>): Promise<void> {
     this.cacheStore.replace(this.key, {
       value: purchases,

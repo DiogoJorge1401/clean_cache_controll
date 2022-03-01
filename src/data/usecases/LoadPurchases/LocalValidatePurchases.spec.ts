@@ -25,4 +25,18 @@ describe('LocalValidatePurchases', () => {
 
     expect(cacheStore.actions).toEqual([])
   })
+  it('Should delete cache if loading fails',  () => {
+    const { cacheStore, sut } = makeSut()
+
+    cacheStore.simulateLoadError()
+
+    sut.validate()
+
+    expect(cacheStore.actions).toEqual([
+      CacheStoreSpy.Action.fetch,
+      CacheStoreSpy.Action.delete,
+    ])
+
+    expect(cacheStore.deleteKey).toBe('purchases')
+  })
 })
